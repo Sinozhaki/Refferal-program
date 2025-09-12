@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Referral By Zen</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1a1a2e;
+            color: #e0e0e0;
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+            position: relative;
+            overflow-y: auto;
+        }
+
+        /* --- Background Animation --- */
+        .pixel-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background-image: linear-gradient(to right, #242442 1px, transparent 1px), linear-gradient(to bottom, #242442 1px, transparent 1px);
+            background-size: 25px 25px;
+            animation: moveGrid 10s linear infinite;
+        }
+
+        @keyframes moveGrid {
+            from { background-position: 0 0; }
+            to { background-position: 25px 25px; }
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            background: repeating-linear-gradient(
+                to bottom,
+                rgba(0, 0, 0, 0.1) 0%,
+                rgba(0, 0, 0, 0.1) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -4;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            background-color: #ffffff;
+            opacity: 0;
+            animation: starFall 5s linear infinite;
+        }
+
+        @keyframes starFall {
+            0% { transform: translateY(-100vh) scale(0); opacity: 0; }
+            5% { transform: translateY(-95vh) scale(1); opacity: 1; }
+            100% { transform: translateY(100vh) scale(0); opacity: 0; }
+        }
+
+        .sparkle-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        .sparkle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background-color: #00ffff;
+            opacity: 0;
+            border-radius: 50%;
+            animation: sparkle-blink 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes sparkle-blink {
+            0% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.5); }
+        }
+
+        .text-neon {
+            text-shadow: 0 0 5px #ff00ff, 0 0 10px #00ffff;
+            animation: pulsateNeon 1.5s infinite ease-in-out alternate;
+        }
+
+        @keyframes pulsateNeon {
+            from {
+                text-shadow: 0 0 5px #ff00ff, 0 0 10px #00ffff;
+            }
+            to {
+                text-shadow: 0 0 10px #ff00ff, 0 0 20px #00ffff;
+            }
+        }
+        
+        /* Removed .card-container styling */
+        .table-container {
+            width: 100%;
+            background-color: rgba(36, 36, 66, 0.5);
+            border: 2px solid #ff00ff;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            position: relative;
+        }
+        .table-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255, 0, 255, 0.2) 0%,
+                rgba(0, 255, 255, 0.2) 100%
+            );
+            opacity: 0.1;
+            z-index: -1;
+        }
+        .table-container th, .table-container td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #242442;
+        }
+        .table-container th {
+            background-color: #ff00ff;
+            color: #1a1a2e;
+            text-shadow: none;
+        }
+        .table-container tr:last-child td {
+            border-bottom: none;
+        }
+        .table-container td {
+            color: #ffffff;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .table-container tr:nth-child(even) {
+            background-color: rgba(36, 36, 66, 0.2);
+        }
+        .table-container tr:hover td {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: scale(1.02);
+        }
+
+        .btn-retro {
+            background-color: #4CAF50;
+            color: white;
+            border: 2px solid #388E3C;
+            text-shadow: 2px 2px #1c4b1d;
+            box-shadow: 4px 4px 0px 0px #388E3C;
+            transition: all 0.1s ease-in-out;
+        }
+
+        .btn-retro:hover {
+            transform: translate(1px, 1px);
+            box-shadow: 3px 3px 0px 0px #388E3C;
+        }
+
+        .btn-retro:active {
+            transform: translate(3px, 3px);
+            box-shadow: 1px 1px 0px 0px #388E3C;
+        }
+    </style>
+</head>
+<body>
+    <div class="pixel-grid"></div>
+    <div class="stars" id="stars-container"></div>
+    <div class="sparkle-container" id="sparkle-container"></div>
+    <div class="text-center w-full max-w-4xl relative z-10 mx-auto p-4 flex flex-col items-center">
+        <h1 class="text-3xl md:text-4xl font-bold mb-4 text-white text-neon">
+            Program Referral By Zen
+        </h1>
+        <div class="text-left mb-8 w-full max-w-600">
+            <h2 class="text-2xl font-bold text-white mb-2 text-center">Skema Reward</h2>
+            <div class="table-container">
+                <table class="w-full text-center">
+                    <thead>
+                        <tr>
+                            <th>Status Akun</th>
+                            <th>Reward per Invite</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Save</td>
+                            <td><span class="text-green-400 font-extrabold">2$</span></td>
+                        </tr>
+                        <tr>
+                            <td>Restric</td>
+                            <td><span class="text-red-400 font-extrabold">1$</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-4 text-sm text-gray-300 space-y-2 text-center">
+                <p>
+                    <span class="text-green-400 font-bold">Save</span> ➡️ Referral Anda berhasil Unrestrict atau Aman sampai hari Payment
+                </p>
+                <p>
+                    <span class="text-red-400 font-bold">Restric</span> ➡️ Referral Anda terkena restric dan tidak bisa dibuka
+                </p>
+            </div>
+        </div>
+        <div class="text-left w-full max-w-600">
+            <h2 class="text-2xl font-bold text-white mb-2 text-center">Cara Bergabung</h2>
+            <p class="text-center mb-4">
+                Untuk mendaftar sebagai pengundang, silakan minta kode referral Anda langsung ke admin.
+            </p>
+            <p class="text-center text-sm text-yellow-400 mb-4">
+                *Catatan: Khusus para pengundang, pembayaran bisa dilakukan satu kali (kalian yang gaji referral kalian sendiri).
+            </p>
+            <a href="https://wa.me/62859106914815" target="_blank" class="flex justify-center">
+                <button class="btn-retro text-white px-6 py-2 rounded-lg text-md">
+                    Hubungi Admin
+                </button>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function createStar() {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.width = `${Math.random() * 2 + 1}px`;
+            star.style.height = star.style.width;
+            star.style.left = `${Math.random() * 100}vw`;
+            star.style.animationDuration = `${Math.random() * 5 + 5}s`;
+            document.getElementById('stars-container').appendChild(star);
+            setTimeout(() => star.remove(), 5000);
+        }
+
+        function createSparkle() {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.style.left = `${Math.random() * 100}vw`;
+            sparkle.style.top = `${Math.random() * 100}vh`;
+            sparkle.style.animationDuration = `${Math.random() * 2 + 1}s`;
+            document.getElementById('sparkle-container').appendChild(sparkle);
+            setTimeout(() => sparkle.remove(), 3000);
+        }
+
+        setInterval(createStar, 200);
+        setInterval(createSparkle, 50);
+    </script>
+</body>
+</html>
